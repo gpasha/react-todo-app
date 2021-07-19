@@ -24,8 +24,12 @@ export const FirebaseState = ({children}) => {
         console.log('fetchNotes res: ', res.data)
     }
 
-    const addNote = async id => {
-        const res = axios.post(`${url}/notes/${id}`)
+    const addNote = async title => {
+        const note = {
+            title,
+            date: new Date().toJSON()
+        }
+        const res = axios.post(`${url}/notes.json`, note)
 
         console.log('addNote res: ', res.data)
     }
