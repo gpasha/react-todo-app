@@ -1,8 +1,11 @@
-import React from 'react'
+import React, {useContext} from 'react'
+import { AlertContext } from '../context/alertContext/alertContext'
 
-export const Alert = ({alert}) => {
+export const Alert = () => {
 
-    if(!alert) {
+    const { alert, hide} = useContext(AlertContext)
+
+    if(!alert.visible) {
         return null
     }
 
@@ -10,7 +13,7 @@ export const Alert = ({alert}) => {
         <div className={`alert alert-${alert.type || 'warning'} alert-dismissible mt-4 d-flex justify-content-between align-items-center`} role="alert">
             <strong>Message: </strong>
             {alert.text}
-            <button type="button" className="btn btn-light close" aria-label="Close">
+            <button type="button" className="btn btn-light close" aria-label="Close" onClick={hide}>
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
