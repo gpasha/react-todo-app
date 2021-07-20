@@ -2,7 +2,7 @@ import React, { useReducer } from 'react'
 import { FirebaseContext } from './firebaseContext'
 import { firebaseReducer } from './firebaseReducer'
 import axios from 'axios'
-import { SHOW_LOADER } from '../types'
+import { ADD_NOTE, FETCH_NOTES, REMOVE_NOTE, SHOW_LOADER } from '../types'
 
 const url = process.env.REACT_APP_DB_URL
 
@@ -22,6 +22,15 @@ export const FirebaseState = ({children}) => {
         const res = await axios.get(`${url}/notes.json`)
 
         console.log('fetchNotes res: ', res.data)
+
+        const payload = Object.keys(res.data).map(key => {
+            return {
+                ...res.data[key],
+                id: key
+            }
+        })
+
+        dispatch({  type: FETCH_NOTES, payload})
     }
 
     const addNote = async title => {
@@ -29,21 +38,33 @@ export const FirebaseState = ({children}) => {
             title,
             date: new Date().toJSON()
         }
-        const res = axios.post(`${url}/notes.json`, note)
 
-        console.log('addNote res: ', res.data)
+        try {        
+            const res = await axios.post(`${url}/notes.json`, note)
+            console.log('addNote res: ', res.data)
+            const payload = {
+                ...note,
+                id: res.data.name
+            }
+
+            dispatch({ type: ADD_NOTE, payload })
+        }
+        catch(e) {
+            throw new Error(e.message)
+        }
     }
 
     const removeNote = async id => {
-        const res = axios.delete(`${url}/notes/${id}`)
+        await axios.delete(`${url}/notes/${id}.json`)
 
-        console.log('removeNote res: ', res.data)
+        dispatch({ type: REMOVE_NOTE, payload: id })
     }
 
     return (
         <FirebaseContext.Provider value={{
             showLoader, fetchNotes, addNote, removeNote,
-            notes: state.notes, loading: state.loading
+            notes: state.notes,
+            loading: state.loading
         }}>
             {children}
         </FirebaseContext.Provider>
