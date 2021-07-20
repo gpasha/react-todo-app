@@ -1,15 +1,18 @@
 import React from 'react'
+import { TransitionGroup, CSSTransition } from 'react-transition-group'
 
 export const Posts = ({posts, onRemove}) => (
-    <ul className="list-group pt-4">
+    <TransitionGroup component="ul" className="list-group pt-4">
         {posts.map(post => (
-            <li key={post.id} className="list-group-item d-flex justify-content-between align-items-center">
-                <div>
-                    <strong>{post.title} </strong>
-                    <small>{post.date}</small>
-                </div>
-                <button type="button" className="btn btn-danger" onClick={() => onRemove(post.id)}>&times;</button>
-            </li>
+            <CSSTransition key={post.id} classNames={'note'} timeout={1000}>
+                <li className="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{post.title} </strong>
+                        <small>{post.date}</small>
+                    </div>
+                    <button type="button" className="btn btn-danger" onClick={() => onRemove(post.id)}>&times;</button>
+                </li>
+            </CSSTransition>
         ))}
-    </ul>
+    </TransitionGroup>
 )

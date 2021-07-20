@@ -13,3 +13,42 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.alert-enter {
+  opacity: 0;
+}
+
+.alert-enter-active {
+  opacity: 1;
+  transition: opacity 1s ease-out;
+}
+
+.alert-exit-active {
+  transition: opacity 1s ease-out;
+  opacity: 0;
+}
+
+.note-enter-active {
+  animation: note 1s ease-in alternate-reverse;
+}
+
+.note-exit-active {
+  animation: note 1s ease-out forwards;
+}
+
+@keyframes note {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  
+  30% {
+    opacity: .7;
+    transform: translateX(30px);
+  }
+  
+  100% {
+    opacity: 0;
+    transform: translateX(-200px);
+  }
+}
